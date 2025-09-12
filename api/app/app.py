@@ -3,9 +3,13 @@ from app.support.support import setup_db
 
 from flask import Flask, abort, jsonify, request
 
-from flask_sqlalchemy import SQLAlchemy
-
-from .config import API_PREFIX, APP_HOST, APP_PORT, APP_VERSION, PRODUCTION_DATABASE_PATH
+from .config import (
+    API_PREFIX,
+    APP_HOST,
+    APP_PORT,
+    APP_VERSION,
+    PRODUCTION_DATABASE_PATH,
+)
 
 from app.support.request_handling import read_user_attributes_from_request  # noqa
 
@@ -13,15 +17,20 @@ from app.support.request_handling import read_user_attributes_from_request  # no
 app = Flask(__name__)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+db_uri = "postgresql+psycopg2://{}".format(PRODUCTION_DATABASE_PATH)
+app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
 
-db_uri = ("postgresql+psycopg2://{}".format(PRODUCTION_DATABASE_PATH))
-models_shared.db = setup_db(app, db_uri)
-db = models_shared.db
-db.init_app(app)
-assert models_shared.db
+db = setup_db(app, db_uri)
+models_shared.db = db
 
-from app.support.data_manipulation import delete_user_by_id, init_test_data, find_user_by_id, get_all_users_in_db, add_new_user_to_db, modify_user_data_in_db  # noqa
+from app.support.data_manipulation import (
+    delete_user_by_id,
+    init_test_data,
+    find_user_by_id,
+    get_all_users_in_db,
+    add_new_user_to_db,
+    modify_user_data_in_db,
+)  # noqa
 
 
 @app.route(API_PREFIX + "/init_data", methods=["POST"])
@@ -29,9 +38,7 @@ def init_test_data_endpoint():
     new_users = init_test_data(db)
 
     new_users = [obj.to_dict() for obj in new_users]
-    resp = {
-        "new_users": new_users
-    }
+    resp = {"new_users": new_users}
 
     return jsonify(resp)
 
@@ -103,14 +110,15 @@ def get_version():
     resp = {
         "version": APP_VERSION,
         "short_name": "Test REST API for SQLite",
-        "long_name": "Test REST API for SQLite, education purpose"
+        "long_name": "Test REST API for SQLite, education purpose",
     }
 
     return jsonify(resp)
 
 
 def main():
-    db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(host=APP_HOST, port=APP_PORT, debug=True)
 
 

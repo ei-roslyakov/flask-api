@@ -1,18 +1,30 @@
-FROM python:3.14.0a1-slim-bookworm
+FROM python:3.13.7-slim-bookworm
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     libpq-dev \
     build-essential \
     gcc \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
-COPY api /var/api
+RUN groupadd --gid 1001 appuser && \
+    useradd --uid 1001 --gid appuser --shell /bin/bash --create-home appuser
+
+RUN mkdir -p /var/api && chown -R appuser:appuser /var/api
+
+COPY --chown=appuser:appuser api/requirements.txt /var/api/
 
 WORKDIR /var/api
 
-RUN pip3 install psycopg2-binary
+RUN pip3 install --no-cache-dir --upgrade pip && \
+    pip3 install --no-cache-dir psycopg2-binary && \
+    pip3 install --no-cache-dir -r requirements.txt
 
-RUN pip3 install -r /var/api/requirements-dev.txt
+COPY --chown=appuser:appuser api /var/api
+
+USER appuser
+
+EXPOSE 5001
 
 CMD ["python", "-m", "app.app"]

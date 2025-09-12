@@ -11,7 +11,7 @@ def read_user_attributes_from_request(json):
         "name": json["name"],
         "last_name": json["last_name"],
         "description": json["description"],
-        "employee": bool(json["employee"])
+        "employee": bool(json["employee"]),
     }
 
     return user

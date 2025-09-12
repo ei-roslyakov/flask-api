@@ -17,6 +17,7 @@ TMP_FILE_PATH = "./tmp"
 
 def create_app():
     from app.app import app
+
     return app
 
 
@@ -65,11 +66,7 @@ def test_version_route_returns_data(test_app, test_db):
     assert resp.status_int == 200
     assert resp.json
 
-    required_attributes = [
-        "version",
-        "short_name",
-        "long_name"
-    ]
+    required_attributes = ["version", "short_name", "long_name"]
 
     for required_attribute in required_attributes:
         assert required_attribute in resp.json
@@ -78,13 +75,7 @@ def test_version_route_returns_data(test_app, test_db):
 def test_returns_single_user_data(test_app, test_db):
     my_app = webtest.TestApp(test_app)
 
-    required_attributes = [
-        "id",
-        "name",
-        "last_name",
-        "description",
-        "employee"
-    ]
+    required_attributes = ["id", "name", "last_name", "description", "employee"]
 
     for expected_user_id in range(1, len(TEST_DATA) + 1):
         resp = my_app.get(API_PREFIX + "/users/{}".format(expected_user_id))
@@ -108,7 +99,9 @@ def test_remove_routing_able_to_remove_users(test_app, test_db):
         resp = my_app.delete(API_PREFIX + "/users/{}".format(expected_user_id))
         assert resp.status_int == 200
 
-        resp = my_app.get(API_PREFIX + "/users/{}".format(expected_user_id), expect_errors=True)
+        resp = my_app.get(
+            API_PREFIX + "/users/{}".format(expected_user_id), expect_errors=True
+        )
         assert resp.status_int == 404
 
 
@@ -119,7 +112,7 @@ def test_add_user_to_db(test_app, test_db):
         "name": "TEST_USER_NAME",
         "last_name": "TEST_LAST_NAME",
         "description": "TEST_POSITION",
-        "employee": "true"
+        "employee": "true",
     }
     resp = my_app.post_json(API_PREFIX + "/users", new_user_data)
     assert resp.status_int == 201
@@ -140,7 +133,7 @@ def test_modify_user_data(test_app, test_db):
         "name": "test_name",
         "last_name": "test last name",
         "description": "description long description",
-        "employee": True
+        "employee": True,
     }
 
     for expected_user_id in range(1, len(TEST_DATA) + 1):
@@ -152,7 +145,9 @@ def test_modify_user_data(test_app, test_db):
         updated_user_data["description"] += " " + str(uuid.uuid4())
         updated_user_data["employee"] = random.choice([True, False])
 
-        resp = my_app.put_json(API_PREFIX + "/users/{}".format(expected_user_id), updated_user_data)
+        resp = my_app.put_json(
+            API_PREFIX + "/users/{}".format(expected_user_id), updated_user_data
+        )
         assert resp.status_int == 200
 
         assert resp.status_int == 200
@@ -169,7 +164,9 @@ def test_modify_user_data(test_app, test_db):
         assert updated_user_data["employee"] == resp.json["employee"]
 
         for user_id_to_test in range(expected_user_id + 1, len(TEST_DATA) + 1):
-            non_damaged_user_resp = my_app.get(API_PREFIX + "/users/{}".format(user_id_to_test))
+            non_damaged_user_resp = my_app.get(
+                API_PREFIX + "/users/{}".format(user_id_to_test)
+            )
             assert non_damaged_user_resp.status_int == 200
             expected_user_data = TEST_DATA[user_id_to_test - 1]
 
@@ -189,10 +186,12 @@ def test_modify_user_data_source_code_by_jenecka0(test_app, test_db):
             "name": str(uuid.uuid4()),
             "last_name": str(uuid.uuid4()),
             "description": str(uuid.uuid4()),
-            "employee": random.choice([True, False])
+            "employee": random.choice([True, False]),
         }
 
-        resp = my_app.put_json(API_PREFIX + "/users/{}".format(expected_user_id), new_user_data)
+        resp = my_app.put_json(
+            API_PREFIX + "/users/{}".format(expected_user_id), new_user_data
+        )
         assert resp.status_int == 200
 
         actual_result = my_app.get(API_PREFIX + "/users/{}".format(expected_user_id))
@@ -221,7 +220,7 @@ def test_lack_of_attributes(test_app, test_db):
     new_user_data = {
         "last_name": "TEST_LAST_NAME",
         "description": "TEST_POSITION",
-        "employee": "true"
+        "employee": "true",
     }
 
     resp = my_app.post_json(API_PREFIX + "/users", new_user_data, expect_errors=True)
@@ -230,7 +229,7 @@ def test_lack_of_attributes(test_app, test_db):
     new_user_data = {
         "name": "TEST_USER_NAME",
         "description": "TEST_POSITION",
-        "employee": "true"
+        "employee": "true",
     }
 
     resp = my_app.post_json(API_PREFIX + "/users", new_user_data, expect_errors=True)
@@ -239,7 +238,7 @@ def test_lack_of_attributes(test_app, test_db):
     new_user_data = {
         "name": "TEST_USER_NAME",
         "last_name": "TEST_LAST_NAME",
-        "employee": "true"
+        "employee": "true",
     }
 
     resp = my_app.post_json(API_PREFIX + "/users", new_user_data, expect_errors=True)
@@ -248,7 +247,7 @@ def test_lack_of_attributes(test_app, test_db):
     new_user_data = {
         "name": "TEST_USER_NAME",
         "last_name": "TEST_LAST_NAME",
-        "description": "TEST_POSITION"
+        "description": "TEST_POSITION",
     }
 
     resp = my_app.post_json(API_PREFIX + "/users", new_user_data, expect_errors=True)
@@ -275,6 +274,8 @@ def test_get_version_app(test_app, test_db):
 def test_connection_to_db(test_app, test_db):
     my_app = webtest.TestApp(test_app)
 
-    resp = my_app.get(API_PREFIX + "/users/{}".format(random.randrange(1, len(TEST_DATA) + 1)))
+    resp = my_app.get(
+        API_PREFIX + "/users/{}".format(random.randrange(1, len(TEST_DATA) + 1))
+    )
 
     assert resp.status_int == 200

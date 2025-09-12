@@ -54,9 +54,7 @@ def add_new_user_to_db(db, request_data):
 
 
 def get_all_users_in_db(db):
-    users = db.session.query(
-        User
-    ).all()
+    users = db.session.query(User).all()
 
     data_to_return = []
     for user in users:
@@ -67,20 +65,10 @@ def get_all_users_in_db(db):
 
 
 def find_user_by_id(db, user_id):
-    return db.session.query(
-        User
-    ).filter(
-        User.id == user_id
-    ).scalar()
+    return db.session.query(User).filter(User.id == user_id).scalar()
 
 
 def delete_user_by_id(db, user_id):
-    db.session.query(
-        User
-    ).filter(
-        User.id == user_id
-    ).delete(
-        synchronize_session=False
-    )
+    db.session.query(User).filter(User.id == user_id).delete(synchronize_session=False)
 
     db.session.commit()

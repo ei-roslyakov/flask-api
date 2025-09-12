@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    container_name: flask-api-db
+    environment:
+      POSTGRES_DB: api
+      POSTGRES_USER: api
+      POSTGRES_PASSWORD: 1234qwe
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: flask-api
+    ports:
+      - "5001:5000"
+    environment:
+      DB_NAME: api
+      DB_HOST: db
+      DB_USER: api
+      DB_PASS: 1234qwe
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
