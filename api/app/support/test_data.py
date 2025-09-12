@@ -1,50 +1,20 @@
 TEST_DATA = [
-    (
-        "Ada",
-        "Lovelace",
-        "Countess of Lovelace",
-        True
-    ),
+    ("Ada", "Lovelace", "Countess of Lovelace", True),
     (
         "Alan",
         "Turing",
         "Mathematician, computer scientist, logician, cryptanalyst, philosopher and theoretical biologist",
-        True
+        True,
     ),
-    (
-        "Hedy",
-        "Lamar",
-        "Actress and inventor",
-        True
-    ),
+    ("Hedy", "Lamar", "Actress and inventor", True),
     (
         "Grace",
         "Hopper",
         "Computer scientist and United States Navy rear admiral",
-        False
+        False,
     ),
-    (
-        "Will",
-        "Smith",
-        "Actor",
-        False
-    ),
-    (
-        "Tina",
-        "Turner",
-        "Singer",
-        True
-    ),
-    (
-        "Arnold",
-        "Schwarzenegger",
-        "Actor",
-        True
-    ),
-    (
-        "Jackie",
-        "Chan",
-        "Actor",
-        True
-    ),
+    ("Will", "Smith", "Actor", False),
+    ("Tina", "Turner", "Singer", True),
+    ("Arnold", "Schwarzenegger", "Actor", True),
+    ("Jackie", "Chan", "Actor", True),
 ]
