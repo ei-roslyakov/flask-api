@@ -4,7 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    
+
+
   - package-ecosystem: "pip"
     directory: "/api"
     schedule:
@@ -13,6 +14,13 @@ updates:
       prefix: "deps"
       prefix-development: "deps-dev"
     open-pull-requests-limit: 10
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
