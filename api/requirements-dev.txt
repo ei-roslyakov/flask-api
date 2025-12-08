@@ -2,7 +2,7 @@
 flake8==7.3.0
 flake8-import-order==0.19.2
 flake8-quotes==3.4.0
-pytest==9.0.0
+pytest==9.0.1
 pytest-catchlog==1.2.2
 pytest-cov==7.0.0
 pytest-mock==3.15.1
