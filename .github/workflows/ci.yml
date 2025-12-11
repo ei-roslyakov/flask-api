@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   pull_request:
 
+permissions:                      # allow GITHUB_TOKEN to push to GHCR
+  contents: read
+  packages: write
+
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository }}
 
