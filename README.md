@@ -27,12 +27,6 @@ docker build -t flask-api .
 ### Run Docker container
 
 ```sh
-docker run -p 5000:5000 flask-api
-```
-
-### Run Docker container with environment variables (if needed)
-
-```sh
 docker run -p 5000:5000 \
   -e DB_NAME=api \
   -e DB_HOST=localhost \
